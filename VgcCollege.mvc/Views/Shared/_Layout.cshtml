@@ -26,69 +26,59 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <!-- ADMIN -->
-                            @if (User.IsInRole("Admin"))
+                        <ul class="navbar-nav flex-grow-1">
+
+                            @if (User.Identity.IsAuthenticated)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Branches" asp-action="Index">Branches</a>
-                                </li>
+                                <!-- ADMIN -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Branches" asp-action="Index">Branches</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Students" asp-action="Index">Students</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Faculty" asp-action="Index">Faculty</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="CourseEnrolments" asp-action="Index">Enrolments</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Assignments" asp-action="Index">Assignments</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Exams" asp-action="Index">Exams</a>
+                                    </li>
+                                }
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Courses" asp-action="Index">Courses</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Students" asp-action="Index">Students</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Faculty" asp-action="Index">Faculty</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="CourseEnrolments" asp-action="Index">Enrolments</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Assignments" asp-action="Index">Assignments</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Exams" asp-action="Index">Exams</a>
-                                </li>
-                            }
-
-                            <!-- FACULTY -->
-                            @if (User.IsInRole("Faculty"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="AssignmentResults" asp-action="Index">Gradebook</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Assignments" asp-action="Index">Assignments</a>
-                                </li>
+                                <!-- FACULTY -->
                                 @if (User.IsInRole("Faculty"))
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-controller="Faculty" asp-action="MyStudents">My Students</a>
+                                        <a class="nav-link" asp-controller="Faculty" asp-action="MyStudents">My Students</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="AssignmentResults" asp-action="Index">Gradebook</a>
                                     </li>
                                 }
-                            }
 
-                            <!-- STUDENT -->
-                            @if (User.IsInRole("Student"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="ExamResults" asp-action="Index">My Results</a>
-                                </li>
+                                <!-- STUDENT -->
                                 @if (User.IsInRole("Student"))
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-controller="Students" asp-action="MyProfile">My Profile</a>
+                                        <a class="nav-link" asp-controller="Students" asp-action="MyProfile">My Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="ExamResults" asp-action="Index">My Results</a>
                                     </li>
                                 }
+                            }
+                        </ul>
 
                             }
                         }

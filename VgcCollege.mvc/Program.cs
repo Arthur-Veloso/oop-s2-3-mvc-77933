@@ -12,7 +12,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
@@ -37,7 +36,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -48,12 +46,17 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 
+// ========================
+// SEED DATA (FIXED)
+// ========================
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    await SeedData.SeedRolesAndUsers(services);
+    // Seed Roles & Users
+    await SeedData.SeedRolesAndUsersAsync(services);
 
+    // Seed Application Data
     var context = services.GetRequiredService<ApplicationDbContext>();
     await SeedData.SeedDataAsync(context);
 }
