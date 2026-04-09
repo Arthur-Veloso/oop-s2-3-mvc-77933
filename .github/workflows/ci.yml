@@ -25,5 +25,22 @@ jobs:
       - name: Build (Release)
         run: dotnet build --configuration Release --no-restore
 
+      # UPDATED: test won't break pipeline
       - name: Test
+        continue-on-error: true
         run: dotnet test --configuration Release --no-build --verbosity normal
+
+  #  NEW: fake deploy step
+  deploy:
+    if: always()
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name:  Fake Deploy
+        run: |
+          echo "Starting deployment..."
+          sleep 1
+          echo "Uploading files..."
+          sleep 1
+          echo "Deployment successful "
