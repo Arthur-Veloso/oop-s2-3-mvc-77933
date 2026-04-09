@@ -31,16 +31,14 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var branch = await _context.Branches
+                .Include(b => b.Courses)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (branch == null)
-            {
                 return NotFound();
-            }
 
             return View(branch);
         }

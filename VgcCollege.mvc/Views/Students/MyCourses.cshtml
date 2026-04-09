@@ -1,0 +1,30 @@
+﻿@model IEnumerable<VgcCollege.Domain.Models.Course>
+
+<h2>My Courses</h2>
+
+@if (!Model.Any())
+{
+    <p>No courses enrolled.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Name</td>
+                    <td>@course.StartDate.ToShortDateString()</td>
+                    <td>@course.EndDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -60,8 +60,10 @@ namespace VgcCollege.mvc.Controllers
         {
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name");
             ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name");
+            ViewData["StatusList"] = new SelectList(new[] { "Active", "Completed", "Dropped" });
             return View();
         }
+
 
         // POST: CourseEnrolments/Create
         [HttpPost]
@@ -84,6 +86,7 @@ namespace VgcCollege.mvc.Controllers
 
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", courseEnrolment.CourseId);
             ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", courseEnrolment.StudentProfileId);
+            ViewData["StatusList"] = new SelectList(new[] { "Active", "Completed", "Dropped" }, courseEnrolment.Status);
 
             return View(courseEnrolment);
         }
@@ -104,6 +107,7 @@ namespace VgcCollege.mvc.Controllers
 
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", courseEnrolment.CourseId);
             ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", courseEnrolment.StudentProfileId);
+            ViewData["StatusList"] = new SelectList(new[] { "Active", "Completed", "Dropped" }, courseEnrolment.Status);
 
             return View(courseEnrolment);
         }
@@ -142,6 +146,7 @@ namespace VgcCollege.mvc.Controllers
 
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", courseEnrolment.CourseId);
             ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", courseEnrolment.StudentProfileId);
+            ViewData["StatusList"] = new SelectList(new[] { "Active", "Completed", "Dropped" }, courseEnrolment.Status);
 
             return View(courseEnrolment);
         }

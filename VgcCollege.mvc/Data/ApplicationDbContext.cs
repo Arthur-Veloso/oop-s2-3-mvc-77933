@@ -21,6 +21,7 @@ namespace VgcCollege.mvc.Data
         public DbSet<AssignmentResult> AssignmentResults => Set<AssignmentResult>();
         public DbSet<Exam> Exams => Set<Exam>();
         public DbSet<ExamResult> ExamResults => Set<ExamResult>();
-      
+        public DbSet<Attendance> Attendances { get; set; }
+
     }
 }

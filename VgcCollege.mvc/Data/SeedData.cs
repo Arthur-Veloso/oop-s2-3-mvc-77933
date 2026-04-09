@@ -24,24 +24,24 @@ namespace VgcCollege.mvc.Data
 
             // ADMIN
             var adminEmail = "admin@vgc.com";
-            var admin = await userManager.FindByEmailAsync(adminEmail);
-
-            if (admin == null)
+            if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
-                admin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+                var admin = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
                 await userManager.CreateAsync(admin, "Admin123!");
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
 
-            // FACULTY
-            var facultyEmail = "faculty@vgc.com";
-            var faculty = await userManager.FindByEmailAsync(facultyEmail);
+            // FACULTY USERS (3)
+            var facultyEmails = new[] { "faculty@vgc.com", "faculty2@vgc.com", "faculty3@vgc.com" };
 
-            if (faculty == null)
+            foreach (var email in facultyEmails)
             {
-                faculty = new IdentityUser { UserName = facultyEmail, Email = facultyEmail, EmailConfirmed = true };
-                await userManager.CreateAsync(faculty, "Faculty123!");
-                await userManager.AddToRoleAsync(faculty, "Faculty");
+                if (await userManager.FindByEmailAsync(email) == null)
+                {
+                    var user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+                    await userManager.CreateAsync(user, "Faculty123!");
+                    await userManager.AddToRoleAsync(user, "Faculty");
+                }
             }
 
             // STUDENTS
@@ -49,11 +49,9 @@ namespace VgcCollege.mvc.Data
 
             foreach (var email in studentEmails)
             {
-                var student = await userManager.FindByEmailAsync(email);
-
-                if (student == null)
+                if (await userManager.FindByEmailAsync(email) == null)
                 {
-                    student = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
+                    var student = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };
                     await userManager.CreateAsync(student, "Student123!");
                     await userManager.AddToRoleAsync(student, "Student");
                 }
@@ -67,7 +65,7 @@ namespace VgcCollege.mvc.Data
         {
             if (context.Branches.Any()) return;
 
-            // BRANCHES (3)
+            // BRANCHES
             var dublin = new Branch { Name = "Dublin", Address = "Dublin City" };
             var cork = new Branch { Name = "Cork", Address = "Cork City" };
             var limerick = new Branch { Name = "Limerick", Address = "Limerick City" };
@@ -75,62 +73,36 @@ namespace VgcCollege.mvc.Data
             context.Branches.AddRange(dublin, cork, limerick);
             await context.SaveChangesAsync();
 
-            // COURSES (6)
+            // FACULTY (3)
+            var faculty1 = new FacultyProfile { Name = "Dr. Brown", Email = "faculty@vgc.com", Phone = "999999" };
+            var faculty2 = new FacultyProfile { Name = "Ms. Green", Email = "faculty2@vgc.com", Phone = "888888" };
+            var faculty3 = new FacultyProfile { Name = "Mr. White", Email = "faculty3@vgc.com", Phone = "777777" };
+
+            context.Faculty.AddRange(faculty1, faculty2, faculty3);
+            await context.SaveChangesAsync();
+
+            // COURSES (ASSIGNED TO FACULTY ✅)
             var courses = new List<Course>
             {
-                new Course { Name = "Software Development", BranchId = dublin.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
-                new Course { Name = "Data Science", BranchId = dublin.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+                new Course { Name = "Software Development", BranchId = dublin.Id, FacultyProfileId = faculty1.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+                new Course { Name = "Data Science", BranchId = dublin.Id, FacultyProfileId = faculty1.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
 
-                new Course { Name = "Business Management", BranchId = cork.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
-                new Course { Name = "Marketing", BranchId = cork.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+                new Course { Name = "Business Management", BranchId = cork.Id, FacultyProfileId = faculty2.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+                new Course { Name = "Marketing", BranchId = cork.Id, FacultyProfileId = faculty2.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
 
-                new Course { Name = "Cyber Security", BranchId = limerick.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
-                new Course { Name = "Networking", BranchId = limerick.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) }
+                new Course { Name = "Cyber Security", BranchId = limerick.Id, FacultyProfileId = faculty3.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) },
+                new Course { Name = "Networking", BranchId = limerick.Id, FacultyProfileId = faculty3.Id, StartDate = DateTime.Now, EndDate = DateTime.Now.AddMonths(6) }
             };
 
             context.Courses.AddRange(courses);
             await context.SaveChangesAsync();
 
-            // STUDENTS (3)
-            var student1 = new StudentProfile
-            {
-                Name = "John Doe",
-                Email = "student1@vgc.com",
-                Phone = "123456",
-                Address = "Dublin",
-                StudentNumber = "S001"
-            };
-
-            var student2 = new StudentProfile
-            {
-                Name = "Jane Smith",
-                Email = "student2@vgc.com",
-                Phone = "654321",
-                Address = "Cork",
-                StudentNumber = "S002"
-            };
-
-            var student3 = new StudentProfile
-            {
-                Name = "Mike Johnson",
-                Email = "student3@vgc.com",
-                Phone = "777777",
-                Address = "Limerick",
-                StudentNumber = "S003"
-            };
+            // STUDENTS
+            var student1 = new StudentProfile { Name = "John Doe", Email = "student1@vgc.com", Phone = "123456", Address = "Dublin", StudentNumber = "S001" };
+            var student2 = new StudentProfile { Name = "Jane Smith", Email = "student2@vgc.com", Phone = "654321", Address = "Cork", StudentNumber = "S002" };
+            var student3 = new StudentProfile { Name = "Mike Johnson", Email = "student3@vgc.com", Phone = "777777", Address = "Limerick", StudentNumber = "S003" };
 
             context.Students.AddRange(student1, student2, student3);
-            await context.SaveChangesAsync();
-
-            // FACULTY
-            var faculty = new FacultyProfile
-            {
-                Name = "Dr. Brown",
-                Email = "faculty@vgc.com",
-                Phone = "999999"
-            };
-
-            context.Faculty.Add(faculty);
             await context.SaveChangesAsync();
 
             // ENROLMENTS
@@ -144,42 +116,32 @@ namespace VgcCollege.mvc.Data
             context.Enrolments.AddRange(enrolments);
             await context.SaveChangesAsync();
 
-            // ASSIGNMENTS (6)
-            var assignments = new List<Assignment>();
-
-            for (int i = 0; i < 6; i++)
+            // ASSIGNMENTS
+            var assignments = courses.Select((c, i) => new Assignment
             {
-                assignments.Add(new Assignment
-                {
-                    CourseId = courses[i].Id,
-                    Title = $"Assignment {i + 1}",
-                    MaxScore = 100,
-                    DueDate = DateTime.Now.AddDays(7 + i)
-                });
-            }
+                CourseId = c.Id,
+                Title = $"Assignment {i + 1}",
+                MaxScore = 100,
+                DueDate = DateTime.Now.AddDays(7 + i)
+            }).ToList();
 
             context.Assignments.AddRange(assignments);
             await context.SaveChangesAsync();
 
-            // EXAMS (6)
-            var exams = new List<Exam>();
-
-            for (int i = 0; i < 6; i++)
+            // EXAMS
+            var exams = courses.Select((c, i) => new Exam
             {
-                exams.Add(new Exam
-                {
-                    CourseId = courses[i].Id,
-                    Title = $"Exam {i + 1}",
-                    Date = DateTime.Now.AddDays(30 + i),
-                    MaxScore = 100,
-                    ResultsReleased = i % 2 == 0
-                });
-            }
+                CourseId = c.Id,
+                Title = $"Exam {i + 1}",
+                Date = DateTime.Now.AddDays(30 + i),
+                MaxScore = 100,
+                ResultsReleased = i % 2 == 0
+            }).ToList();
 
             context.Exams.AddRange(exams);
             await context.SaveChangesAsync();
 
-            // EXAM RESULTS
+            // RESULTS
             var results = new List<ExamResult>
             {
                 new ExamResult { ExamId = exams[0].Id, StudentProfileId = student1.Id, Score = 85, Grade = "A" },

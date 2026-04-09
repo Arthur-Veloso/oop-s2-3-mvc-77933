@@ -32,6 +32,23 @@ namespace VgcCollege.mvc.Controllers
             return View(student);
         }
 
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> MyCourses()
+        {
+            var userEmail = User.Identity.Name;
+
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.Email == userEmail);
+
+            var courses = await _context.Enrolments
+                .Include(e => e.Course)
+                .Where(e => e.StudentProfileId == student.Id)
+                .Select(e => e.Course)
+                .ToListAsync();
+
+            return View(courses);
+        }
+
         // GET: Students
         public async Task<IActionResult> Index()
         {

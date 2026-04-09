@@ -25,7 +25,29 @@ namespace VgcCollege.mvc.Controllers
         [Authorize(Roles = "Faculty")]
         public async Task<IActionResult> MyStudents()
         {
-            var students = await _context.Students.ToListAsync();
+            var userEmail = User.Identity.Name;
+
+            // Get current faculty
+            var faculty = await _context.Faculty
+                .FirstOrDefaultAsync(f => f.Email == userEmail);
+
+            if (faculty == null)
+                return NotFound();
+
+            // Get courses assigned to this faculty
+            var courseIds = await _context.Courses
+                .Where(c => c.FacultyProfileId == faculty.Id)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            // Get ONLY students enrolled in those courses
+            var students = await _context.Enrolments
+                .Include(e => e.Student)
+                .Where(e => courseIds.Contains(e.CourseId))
+                .Select(e => e.Student)
+                .Distinct()
+                .ToListAsync();
+
             return View(students);
         }
 

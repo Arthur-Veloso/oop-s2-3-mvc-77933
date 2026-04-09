@@ -22,17 +22,24 @@ namespace VgcCollege.mvc.Controllers
         }
 
         // GET: ExamResults
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Index()
         {
             var userEmail = User.Identity.Name;
 
-            var results = _context.ExamResults
-                .Include(e => e.Exam)
-                .Include(e => e.Student)
-                .Where(r => r.Exam.ResultsReleased &&
-                            (User.IsInRole("Admin") || r.Student.Email == userEmail));
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.Email == userEmail);
 
-            return View(await results.ToListAsync());
+            if (student == null)
+                return NotFound();
+
+            var results = await _context.ExamResults
+                .Include(r => r.Exam)
+                .Where(r => r.StudentProfileId == student.Id
+                            && r.Exam.ResultsReleased == true)
+                .ToListAsync();
+
+            return View(results);
         }
 
         // GET: ExamResults/Details/5

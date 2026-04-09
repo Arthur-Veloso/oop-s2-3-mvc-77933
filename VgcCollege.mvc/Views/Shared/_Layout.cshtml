@@ -52,6 +52,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="Exams" asp-action="Index">Exams</a>
                                     </li>
+                
                                 }
 
                                 <!-- FACULTY -->
@@ -63,6 +64,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="AssignmentResults" asp-action="Index">Gradebook</a>
                                     </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Attendances" asp-action="Index">Attendance</a>
+                                </li>
                                 }
 
                                 <!-- STUDENT -->
@@ -74,7 +78,13 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="ExamResults" asp-action="Index">My Results</a>
                                     </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Students" asp-action="MyCourses">My Courses</a>
+                                </li>
                                 }
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Attendances" asp-action="Index">Attendance</a>
+                            </li>
                             }
                         </ul>
 

@@ -1,4 +1,4 @@
-﻿@model VgcCollege.Domain.Models.CourseEnrolment
+﻿@model VgcCollege.Domain.Models.Attendance
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>CourseEnrolment</h4>
+<h4>Attendance</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,13 +21,13 @@
                 <select asp-for="CourseId" class ="form-control" asp-items="ViewBag.CourseId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="EnrolDate" class="control-label"></label>
-                <input asp-for="EnrolDate" class="form-control" />
-                <span asp-validation-for="EnrolDate" class="text-danger"></span>
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="Date" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control" asp-items="ViewBag.StatusList"></select>
+            <<div class="form-check">
+                <input class="form-check-input" asp-for="IsPresent" />
+                <label class="form-check-label">Present</label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -40,6 +40,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
