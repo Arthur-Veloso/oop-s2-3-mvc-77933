@@ -1,42 +1,33 @@
 ﻿@model VgcCollege.Domain.Models.CourseEnrolment
 
-@{
-    ViewData["Title"] = "Details";
-}
+<h2 class="mb-4">Enrolment Details</h2>
 
-<h1>Details</h1>
+<div class="card shadow-sm p-4">
 
-<div>
-    <h4>CourseEnrolment</h4>
+    <h4 class="mb-3">@Model.Course.Name</h4>
+
+    <p><strong>Student:</strong> @Model.Student.Name</p>
+    <p><strong>Email:</strong> @Model.Student.Email</p>
+
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Student)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Student.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Course)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Course.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EnrolDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EnrolDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
+
+    <p><strong>Enrol Date:</strong> @Model.EnrolDate.ToShortDateString()</p>
+
+    <p>
+        <strong>Status:</strong>
+        @if (Model.Status == "Active")
+        {
+            <span class="badge bg-success">Active</span>
+        }
+        else
+        {
+            <span class="badge bg-secondary">@Model.Status</span>
+        }
+    </p>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<br />
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

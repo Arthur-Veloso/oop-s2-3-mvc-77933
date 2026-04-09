@@ -32,17 +32,17 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var course = await _context.Courses
                 .Include(c => c.Branch)
+                .Include(c => c.Faculty)
+                .Include(c => c.Enrolments)
+                    .ThenInclude(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (course == null)
-            {
                 return NotFound();
-            }
 
             return View(course);
         }
@@ -60,7 +60,7 @@ namespace VgcCollege.mvc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,BranchId,StartDate,EndDate")] Course course)
+        public async Task<IActionResult> Create([Bind("Id,Name,BranchId,StartDate,EndDate,FacultyProfileId")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace VgcCollege.mvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Address", course.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
             return View(course);
         }
 
@@ -85,7 +85,7 @@ namespace VgcCollege.mvc.Controllers
             {
                 return NotFound();
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Address", course.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
             return View(course);
         }
 
@@ -121,7 +121,7 @@ namespace VgcCollege.mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Address", course.BranchId);
+            ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name", course.BranchId);
             return View(course);
         }
 

@@ -1,42 +1,62 @@
 ﻿@model VgcCollege.Domain.Models.Course
 
-@{
-    ViewData["Title"] = "Details";
+<h1 class="mb-3">Course Details</h1>
+
+<div class="card p-3 mb-4">
+    <h4>@Model.Name</h4>
+    <p><strong>Branch:</strong> @Model.Branch?.Name</p>
+    <p><strong>Start:</strong> @Model.StartDate.ToShortDateString()</p>
+    <p><strong>End:</strong> @Model.EndDate.ToShortDateString()</p>
+</div>
+
+
+<!-- FACULTY -->
+<h4 class="mt-4">Faculty</h4>
+
+@if (Model.Faculty != null)
+{
+    <div class="card p-3 mb-3 shadow-sm">
+        <strong>@Model.Faculty.Name</strong><br />
+        <span class="text-muted">@Model.Faculty.Email</span>
+    </div>
+}
+else
+{
+    <p class="text-muted">No faculty assigned to this course.</p>
 }
 
-<h1>Details</h1>
+<!-- STUDENTS -->
+<h4>Enrolled Students</h4>
 
-<div>
-    <h4>Course</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Branch)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Branch.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+@if (Model.Enrolments != null && Model.Enrolments.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var enrol in Model.Enrolments
+                    .GroupBy(e => e.StudentProfileId)
+                    .Select(g => g.First()))
+            {
+                <tr>
+                    <td>@enrol.Student.Name</td>
+                    <td>@enrol.Student.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No students enrolled in this course.</p>
+}
+
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
 </div>

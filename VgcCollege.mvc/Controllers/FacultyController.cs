@@ -61,18 +61,17 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var facultyProfile = await _context.Faculty
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (facultyProfile == null)
-            {
+            var faculty = await _context.Faculty
+                .Include(f => f.Courses)
+                    .ThenInclude(c => c.Branch)
+                .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (faculty == null)
                 return NotFound();
-            }
 
-            return View(facultyProfile);
+            return View(faculty);
         }
 
         // GET: Faculty/Create

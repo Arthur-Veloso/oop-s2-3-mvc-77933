@@ -27,6 +27,8 @@ namespace VgcCollege.mvc.Controllers
             var userEmail = User.Identity.Name;
 
             var student = await _context.Students
+                .Include(s => s.Enrolments)
+                    .ThenInclude(e => e.Course)
                 .FirstOrDefaultAsync(s => s.Email == userEmail);
 
             return View(student);
@@ -59,18 +61,17 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var studentProfile = await _context.Students
+            var student = await _context.Students
+                .Include(s => s.Enrolments)
+                    .ThenInclude(e => e.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (studentProfile == null)
-            {
-                return NotFound();
-            }
 
-            return View(studentProfile);
+            if (student == null)
+                return NotFound();
+
+            return View(student);
         }
 
         // GET: Students/Create

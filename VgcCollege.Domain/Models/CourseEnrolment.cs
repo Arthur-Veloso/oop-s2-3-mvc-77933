@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace VgcCollege.Domain.Models
 {
+    [Index(nameof(StudentProfileId), nameof(CourseId), IsUnique = true)]
     public class CourseEnrolment
     {
         public int Id { get; set; }
@@ -19,5 +21,6 @@ namespace VgcCollege.Domain.Models
         public DateTime EnrolDate { get; set; }
 
         public string Status { get; set; } = "Active";
+
     }
 }

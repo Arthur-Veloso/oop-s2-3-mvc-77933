@@ -18,5 +18,7 @@ namespace VgcCollege.Domain.Models
         public DateTime EndDate { get; set; }
         public int? FacultyProfileId { get; set; }
         public FacultyProfile? Faculty { get; set; }
+
+        public ICollection<CourseEnrolment> Enrolments { get; set; } = new List<CourseEnrolment>();
     }
 }

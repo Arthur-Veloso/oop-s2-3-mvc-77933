@@ -1,65 +1,42 @@
 ﻿@model IEnumerable<VgcCollege.Domain.Models.StudentProfile>
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Students</h1>
+<h2 class="mb-4">Students</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">+ Add Student</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUserId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StudentNumber)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUserId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentNumber)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <!-- Avatar -->
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-success text-white rounded-circle me-2 d-flex justify-content-center align-items-center"
+                             style="width:40px;height:40px;">
+                            @item.Name.Substring(0, 1)
+                        </div>
+                        <h5 class="mb-0">@item.Name</h5>
+                    </div>
+
+                    <p class="text-muted mb-1">@item.Email</p>
+                    <p class="text-muted mb-1">📞 @item.Phone</p>
+                    <p class="text-muted mb-1">📍 @item.Address</p>
+                    <p class="text-muted">🎓 @item.StudentNumber</p>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>

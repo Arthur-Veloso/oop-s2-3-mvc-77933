@@ -16,5 +16,7 @@ namespace VgcCollege.Domain.Models
         public string Phone { get; set; } = "";
         public string Address { get; set; } = "";
         public string StudentNumber { get; set; } = "";
+
+        public ICollection<CourseEnrolment> Enrolments { get; set; } = new List<CourseEnrolment>();
     }
 }
