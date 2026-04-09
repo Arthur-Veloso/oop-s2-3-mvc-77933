@@ -42,10 +42,14 @@ namespace VgcCollege.mvc.Controllers
             var student = await _context.Students
                 .FirstOrDefaultAsync(s => s.Email == userEmail);
 
+            if (student == null)
+                return NotFound();
+
             var courses = await _context.Enrolments
                 .Include(e => e.Course)
                 .Where(e => e.StudentProfileId == student.Id)
                 .Select(e => e.Course)
+                .Distinct() 
                 .ToListAsync();
 
             return View(courses);

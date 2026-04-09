@@ -24,8 +24,12 @@ namespace VgcCollege.mvc.Controllers
         // GET: AssignmentResults
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.AssignmentResults.Include(a => a.Assignment).Include(a => a.Student);
-            return View(await applicationDbContext.ToListAsync());
+            var results = await _context.AssignmentResults
+                .Include(a => a.Assignment)
+                .Include(a => a.Student)
+                .ToListAsync();
+
+            return View(results);
         }
 
         // GET: AssignmentResults/Details/5
@@ -52,7 +56,7 @@ namespace VgcCollege.mvc.Controllers
         public IActionResult Create()
         {
             ViewData["AssignmentId"] = new SelectList(_context.Assignments, "Id", "Title");
-            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Address");
+            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name");
             return View();
         }
 

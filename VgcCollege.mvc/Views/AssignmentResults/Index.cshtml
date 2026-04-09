@@ -1,53 +1,68 @@
 ﻿@model IEnumerable<VgcCollege.Domain.Models.AssignmentResult>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Assignment Results";
 }
 
-<h1>AssignmentResult</h1>
+<h2 class="mb-4">📝 Assignment Results</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">+ Add Result</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Assignment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Score)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Feedback)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Assignment.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Score)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feedback)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="card shadow-lg border-0">
+    <div class="card-body p-0">
+
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Assignment</th>
+                    <th>Student</th>
+                    <th>Score</th>
+                    <th>Feedback</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.Assignment?.Title</strong><br />
+                            <small class="text-muted">@item.Assignment?.Course?.Name</small>
+                        </td>
+
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success text-white rounded-circle me-2 d-flex justify-content-center align-items-center"
+                                     style="width:35px;height:35px;">
+                                    @item.Student?.Name.Substring(0, 1)
+                                </div>
+                                @item.Student?.Name
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-primary">
+                                @item.Score
+                            </span>
+                        </td>
+
+                        <td>@item.Feedback</td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-warning">Edit</a>
+
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

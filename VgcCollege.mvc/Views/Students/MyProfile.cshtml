@@ -1,8 +1,76 @@
 ﻿@model VgcCollege.Domain.Models.StudentProfile
 
-<h2>My Profile</h2>
+@{
+    ViewData["Title"] = "Profile";
+}
 
-<p><strong>Name:</strong> @Model.Name</p>
-<p><strong>Email:</strong> @Model.Email</p>
-<p><strong>Phone:</strong> @Model.Phone</p>
-<p><strong>Student Number:</strong> @Model.StudentNumber</p>
+<div class="container mt-4">
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+
+            <!-- Header -->
+            <div class="d-flex align-items-center mb-4">
+
+                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center"
+                     style="width:70px;height:70px;font-size:28px;">
+                    @Model.Name.Substring(0, 1)
+                </div>
+
+                <div class="ms-3">
+                    <h3 class="mb-0 fw-bold">@Model.Name</h3>
+                    <small class="text-muted">Student ID: @Model.StudentNumber</small>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <!-- Info Grid -->
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted">Email</label>
+                    <div class="fw-semibold">@Model.Email</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted">Phone</label>
+                    <div class="fw-semibold">@Model.Phone</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted">Address</label>
+                    <div class="fw-semibold">@Model.Address</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted">Status</label>
+                    <div>
+                        <span class="badge bg-success">Active Student</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between">
+
+                <a asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-warning">
+                    Edit Profile
+                </a>
+
+                <a asp-action="MyCourses"
+                   class="btn btn-outline-primary">
+                    My Courses
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

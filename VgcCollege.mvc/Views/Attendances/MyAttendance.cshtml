@@ -1,10 +1,10 @@
-﻿@model IEnumerable<VgcCollege.Domain.Models.Course>
+﻿@model IEnumerable<VgcCollege.Domain.Models.Attendance>
 
 @{
-    ViewData["Title"] = "Courses";
+    ViewData["Title"] = "Attendance";
 }
 
-<h2 class="mb-4">📚 My Courses</h2>
+<h2 class="mb-4">📅 My Attendance</h2>
 
 <div class="card shadow-lg border-0">
     <div class="card-body p-0">
@@ -13,8 +13,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>Course</th>
-                    <th>Start</th>
-                    <th>End</th>
+                    <th>Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -22,33 +21,25 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    var isActive = item.EndDate >= DateTime.Now;
-
                     <tr>
                         <td class="fw-bold">
-                            @item.Name
+                            @item.Course?.Name
                         </td>
 
                         <td>
                             <small class="text-muted">
-                                @item.StartDate.ToString("dd MMM yyyy")
+                                @item.Date.ToString("dd MMM yyyy")
                             </small>
                         </td>
 
                         <td>
-                            <small class="text-muted">
-                                @item.EndDate.ToString("dd MMM yyyy")
-                            </small>
-                        </td>
-
-                        <td>
-                            @if (isActive)
+                            @if (item.IsPresent)
                             {
-                                <span class="badge bg-success">Active</span>
+                                <span class="badge bg-success">Present</span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">Completed</span>
+                                <span class="badge bg-danger">Absent</span>
                             }
                         </td>
                     </tr>

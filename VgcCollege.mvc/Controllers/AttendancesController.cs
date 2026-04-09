@@ -11,7 +11,7 @@ using VgcCollege.mvc.Data;
 
 namespace VgcCollege.mvc.Controllers
 {
-    [Authorize(Roles = "Admin,Faculty")]
+    [Authorize(Roles = "Admin,Faculty, Student")]
     public class AttendancesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,8 +24,33 @@ namespace VgcCollege.mvc.Controllers
         // GET: Attendances
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Attendances.Include(a => a.Course).Include(a => a.Student);
-            return View(await applicationDbContext.ToListAsync());
+            var attendance = await _context.Attendances
+                .Include(a => a.Student)
+                .Include(a => a.Course)
+                .OrderByDescending(a => a.Date)
+                .ToListAsync();
+
+            return View(attendance);
+        }
+
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> MyAttendance()
+        {
+            var userEmail = User.Identity.Name;
+
+            var student = await _context.Students
+                .FirstOrDefaultAsync(s => s.Email == userEmail);
+
+            if (student == null)
+                return NotFound();
+
+            var attendance = await _context.Attendances
+                .Include(a => a.Course)
+                .Where(a => a.StudentProfileId == student.Id)
+                .OrderByDescending(a => a.Date)
+                .ToListAsync();
+
+            return View(attendance);
         }
 
         // GET: Attendances/Details/5

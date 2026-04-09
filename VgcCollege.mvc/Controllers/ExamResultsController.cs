@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VgcCollege.Domain.Models;
@@ -21,7 +20,7 @@ namespace VgcCollege.mvc.Controllers
             _context = context;
         }
 
-        // GET: ExamResults
+        // ✅ STUDENT RESULTS
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Index()
         {
@@ -35,6 +34,7 @@ namespace VgcCollege.mvc.Controllers
 
             var results = await _context.ExamResults
                 .Include(r => r.Exam)
+                    .ThenInclude(e => e.Course) // 🔥 IMPORTANT FIX
                 .Where(r => r.StudentProfileId == student.Id
                             && r.Exam.ResultsReleased == true)
                 .ToListAsync();
@@ -46,18 +46,16 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var examResult = await _context.ExamResults
                 .Include(e => e.Exam)
+                    .ThenInclude(e => e.Course) // 🔥 FIX
                 .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (examResult == null)
-            {
                 return NotFound();
-            }
 
             return View(examResult);
         }
@@ -66,13 +64,11 @@ namespace VgcCollege.mvc.Controllers
         public IActionResult Create()
         {
             ViewData["ExamId"] = new SelectList(_context.Exams, "Id", "Title");
-            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Address");
+            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name"); // FIXED
             return View();
         }
 
         // POST: ExamResults/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ExamId,StudentProfileId,Score,Grade")] ExamResult examResult)
@@ -83,8 +79,10 @@ namespace VgcCollege.mvc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ExamId"] = new SelectList(_context.Exams, "Id", "Title", examResult.ExamId);
-            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Address", examResult.StudentProfileId);
+            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", examResult.StudentProfileId);
+
             return View(examResult);
         }
 
@@ -92,31 +90,26 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var examResult = await _context.ExamResults.FindAsync(id);
+
             if (examResult == null)
-            {
                 return NotFound();
-            }
+
             ViewData["ExamId"] = new SelectList(_context.Exams, "Id", "Title", examResult.ExamId);
-            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Address", examResult.StudentProfileId);
+            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", examResult.StudentProfileId);
+
             return View(examResult);
         }
 
         // POST: ExamResults/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ExamId,StudentProfileId,Score,Grade")] ExamResult examResult)
         {
             if (id != examResult.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -128,18 +121,17 @@ namespace VgcCollege.mvc.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ExamResultExists(examResult.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ExamId"] = new SelectList(_context.Exams, "Id", "Title", examResult.ExamId);
-            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Address", examResult.StudentProfileId);
+            ViewData["StudentProfileId"] = new SelectList(_context.Students, "Id", "Name", examResult.StudentProfileId);
+
             return View(examResult);
         }
 
@@ -147,18 +139,15 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var examResult = await _context.ExamResults
                 .Include(e => e.Exam)
                 .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (examResult == null)
-            {
                 return NotFound();
-            }
 
             return View(examResult);
         }
@@ -169,12 +158,12 @@ namespace VgcCollege.mvc.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var examResult = await _context.ExamResults.FindAsync(id);
+
             if (examResult != null)
-            {
                 _context.ExamResults.Remove(examResult);
-            }
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
