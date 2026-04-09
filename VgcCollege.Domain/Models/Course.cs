@@ -16,5 +16,7 @@ namespace VgcCollege.Domain.Models
 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public int? FacultyProfileId { get; set; }
+        public FacultyProfile? Faculty { get; set; }
     }
 }

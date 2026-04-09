@@ -26,8 +26,6 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-                        <ul class="navbar-nav flex-grow-1">
-
                             @if (User.Identity.IsAuthenticated)
                             {
                                 <!-- ADMIN -->
@@ -80,9 +78,8 @@
                             }
                         </ul>
 
-                            }
-                        }
-                    </ul>
+                       
+                    
                     <partial name="_LoginPartial" />
                 </div>
             </div>

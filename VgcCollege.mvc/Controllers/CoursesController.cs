@@ -51,6 +51,7 @@ namespace VgcCollege.mvc.Controllers
         public IActionResult Create()
         {
             ViewData["BranchId"] = new SelectList(_context.Branches, "Id", "Name");
+            ViewData["FacultyProfileId"] = new SelectList(_context.Faculty, "Id", "Name");
             return View();
         }
 
