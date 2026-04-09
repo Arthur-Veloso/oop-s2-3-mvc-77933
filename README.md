@@ -19,9 +19,13 @@ admin@vgc.com / Password123!
 
 Faculty:
 faculty@vgc.com / Password123!
+faculty2@vgc.com
+faculty3@vgc.com
 
 Student:
 student@vgc.com / Password123!
+student1@vgc.com
+student2@vgc.com
 
 ## How to Run
 1. Update database:
