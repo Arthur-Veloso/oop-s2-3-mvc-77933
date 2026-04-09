@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System;
 
 namespace VgcCollege.Domain.Models
 {
@@ -11,9 +8,13 @@ namespace VgcCollege.Domain.Models
         public int Id { get; set; }
 
         public int StudentProfileId { get; set; }
+
+      
         public StudentProfile Student { get; set; }
 
         public int CourseId { get; set; }
+
+       
         public Course Course { get; set; }
 
         public DateTime Date { get; set; }
